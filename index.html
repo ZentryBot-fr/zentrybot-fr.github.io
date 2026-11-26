@@ -176,7 +176,7 @@ footer a:hover{color:var(--encre);text-decoration:underline}
    - JOURNAL : ajoute une ligne en haut à chaque mise à jour du bot.
    Le nom, le slogan et la couleur se règlent dans le panel (Personnalisation).
 --------------------------------------------------------------------------- */
-const AUTEUR = 'Koteons';
+const AUTEUR = 'ig.no.ble';
 const JOURNAL = [
   ['2026-11-26', 'Ananta devient Zentry. De bot d’économie, il passe à bot complet : modération, filtre, logs, niveaux, tickets, giveaways… et ce site.'],
   ['2026-11-25', 'Première version, sous le nom d’Ananta : l’économie, la banque, la boutique et une dizaine de jeux de casino.'],
@@ -398,6 +398,8 @@ function habiller(page){
     h('a', {href: INFO.invitation || '#'}, 'Ajouter'),
     h('a', {href:'/commandes'}, 'Commandes'),
     INFO.support ? h('a', {href: INFO.support, target:'_blank', rel:'noopener'}, 'Serveur support') : null,
+    h('a', {href:'https://zentrybot-fr.github.io/conditions/'}, 'Conditions d’utilisation'),
+    h('a', {href:'https://zentrybot-fr.github.io/confidentialite/'}, 'Confidentialité'),
     EN_LIGNE ? h('a', {href:'/panel'}, 'Panel') : null].filter(Boolean));
 }
 

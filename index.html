@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zentry, un bot Discord gratuit</title>
+<meta name="description" content="Zentry est un bot Discord français et gratuit : modération, économie et casino, niveaux, giveaways, tickets.">
+<link rel="canonical" href="https://zentrybot-fr.github.io/">
+<meta property="og:title" content="Zentry, un bot Discord gratuit">
+<meta property="og:description" content="Modération, économie et casino, niveaux, giveaways, tickets. En français et gratuit.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --papier:#ffffff;--encre:#1c2033;--gris:#5d6174;--trait:#e4e4ea;--fond2:#f5f5f7;--code:#efeff3;
+  --safran:#f2a541;
+  --discord:#313338;--discord2:#2b2d31;--dtexte:#dbdee1;--dgris:#949ba4;--blurple:#5865f2;
+  --texte:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --main:"Caveat","Segoe Print","Bradley Hand",cursive;
+}
+*{box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{margin:0;background:var(--papier);color:var(--encre);font:18px/1.65 var(--texte);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+p{margin:0 0 1em}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px}
+:focus-visible{outline:3px solid var(--safran);outline-offset:3px;border-radius:4px}
+code{font:600 .84em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--code);padding:2px 6px;border-radius:6px;white-space:nowrap}
+
+/* en-tête */
+.top .wrap{display:flex;align-items:center;gap:24px;min-height:76px;flex-wrap:wrap}
+.marque{font-weight:700;font-size:23px;text-decoration:none;display:flex;align-items:center;gap:10px;letter-spacing:-.01em}
+.marque img{width:34px;height:34px;border-radius:50%}
+.liens{display:flex;gap:22px;margin-left:auto;align-items:center}
+.liens a{color:var(--gris);text-decoration:none}
+.liens a:hover,.liens a[aria-current=page]{color:var(--encre);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}
+.bouton{display:inline-block;background:var(--encre);color:#fff !important;text-decoration:none !important;font-weight:700;padding:13px 22px;border-radius:12px}
+.bouton:hover{background:#30375a}
+.bouton.petit{padding:8px 15px;font-size:16px;border-radius:10px}
+.lien{font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+.lien:hover{text-decoration-color:var(--safran)}
+
+/* ouverture */
+.intro{display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:center;padding-top:48px;padding-bottom:30px}
+h1{font-size:clamp(56px,9vw,104px);line-height:1;margin:0 0 26px;letter-spacing:-.035em;position:relative;display:inline-block}
+h1 svg{position:absolute;left:-2%;bottom:-16px;width:104%;height:22px;overflow:visible}
+h1 svg path{fill:none;stroke:var(--safran);stroke-width:7;stroke-linecap:round}
+.chapeau{font-size:clamp(21px,2.3vw,26px);line-height:1.4;margin-bottom:16px}
+.intro p.suite{color:var(--gris);max-width:30em}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;margin-top:30px}
+
+/* captures d'écran Discord */
+figure{margin:0}
+.capture{position:relative}
+.fenetre{background:var(--discord);color:var(--dtexte);border-radius:10px;box-shadow:0 22px 44px -22px rgba(28,32,51,.55);font:15px/1.4 "gg sans","Noto Sans",system-ui,sans-serif;overflow:hidden}
+.penche-g .fenetre{transform:rotate(-1.4deg)}
+.penche-d .fenetre{transform:rotate(1.1deg)}
+.barre{padding:11px 16px;border-bottom:1px solid #1f2023;font-weight:600;color:#f2f3f5}
+.barre i{font-style:normal;color:var(--dgris);margin-right:6px;font-size:19px}
+.msgs{padding:10px 16px 16px}
+.msg{display:flex;gap:13px;padding:6px 0}
+.av{width:38px;height:38px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;color:#fff;overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover}
+.qui{font-weight:600;color:#f2f3f5}
+.qui small{font-weight:400;color:var(--dgris);font-size:12px;margin-left:6px}
+.tag{background:var(--blurple);color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:4px;margin-left:5px;vertical-align:2px}
+.utilise{color:var(--dgris);font-size:13px}
+.utilise b{color:#c9cdfb;font-weight:500}
+.embed{margin-top:5px;background:var(--discord2);border-left:4px solid var(--safran);border-radius:4px;padding:9px 13px 11px;max-width:330px}
+.embed .t{font-weight:700;color:#f2f3f5;margin-bottom:3px}
+.embed code{background:#1e1f22;color:var(--dtexte);font-size:13px;margin-right:3px}
+.dbtns{display:flex;gap:7px;margin-top:7px;flex-wrap:wrap}
+.dbtn{background:#4e5058;color:#fff;border-radius:4px;padding:5px 11px;font-size:13px;font-weight:500}
+.dbtn.p{background:var(--blurple)}.dbtn.v{background:#248046}
+figcaption{font:600 25px/1.15 var(--main);color:var(--gris);display:flex;align-items:flex-start;gap:8px;margin-top:18px;padding-left:28px}
+figcaption svg{flex:none;margin-top:-10px;color:var(--gris)}
+
+/* sections */
+section.bloc{padding:80px 0}
+h2{font-size:clamp(30px,3.4vw,40px);line-height:1.15;margin:0 0 14px;letter-spacing:-.02em}
+h3{font-size:24px;margin:0 0 10px;letter-spacing:-.01em}
+.sous{color:var(--gris);max-width:36em;margin-bottom:52px}
+.rangee{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:84px}
+.rangee.inverse .txt{order:2}
+.rangee .txt{max-width:31em}
+.rangee .txt p{color:#34384b}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.duo p{color:#34384b}
+
+/* étapes */
+.etapes{background:var(--fond2)}
+ol.pas{list-style:none;padding:0;margin:36px 0 34px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px;counter-reset:pas}
+ol.pas li{counter-increment:pas;position:relative;padding-top:58px;color:#34384b}
+ol.pas li::before{content:counter(pas);position:absolute;top:-6px;left:-2px;font:700 64px/1 var(--main);color:var(--safran)}
+ol.pas b{color:var(--encre)}
+
+/* questions et journal */
+.qr{max-width:760px}
+details{border-bottom:1px solid var(--trait);padding:4px 0}
+summary{cursor:pointer;list-style:none;font-weight:700;font-size:20px;padding:16px 36px 16px 0;position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:6px;top:10px;font:700 30px/1 var(--main);color:var(--gris)}
+details[open] summary::after{content:"–"}
+details p{color:#34384b;margin:0 0 18px;max-width:40em}
+.journal{list-style:none;padding:0;margin:30px 0 0;max-width:760px}
+.journal li{display:grid;grid-template-columns:200px 1fr;gap:20px;padding:16px 0;border-top:1px solid var(--trait)}
+.journal time{font:700 24px/1.2 var(--main);color:var(--gris)}
+
+/* serveurs */
+.serveurs{display:flex;flex-direction:column;max-width:860px}
+.srv{display:grid;grid-template-columns:56px 1fr auto;gap:18px;align-items:center;padding:20px 0;border-top:1px solid var(--trait)}
+.srv .ic{width:56px;height:56px;border-radius:16px;background:var(--fond2);display:grid;place-items:center;font-weight:700;font-size:22px;overflow:hidden}
+.srv .ic img{width:100%;height:100%;object-fit:cover}
+.srv b{font-size:19px}
+.srv .meta{color:var(--gris);font-size:15px}
+.srv p{margin:4px 0 0;color:#34384b;font-size:16px}
+.vide{color:var(--gris);border:2px dashed var(--trait);border-radius:14px;padding:24px;max-width:760px}
+
+/* page des commandes */
+.tete{padding:36px 0 26px}
+.tete h1{font-size:clamp(44px,6vw,68px);margin-bottom:18px}
+.outils{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:8px 0 34px}
+.chercher{flex:1 1 280px;max-width:420px;border:2px solid var(--trait);border-radius:12px;padding:12px 15px;font:inherit;color:var(--encre)}
+.chercher:focus{outline:none;border-color:var(--encre)}
+.filtre{all:unset;cursor:pointer;color:var(--gris);font-size:16px;padding:4px 0;border-bottom:2px solid transparent}
+.filtre[aria-pressed=true]{color:var(--encre);font-weight:700;border-color:var(--safran)}
+.filtre:focus-visible{outline:3px solid var(--safran)}
+.cat{margin-bottom:46px;max-width:860px}
+.cat h2{font-size:26px;margin-bottom:6px}
+.cmd{display:grid;grid-template-columns:minmax(150px,240px) 1fr auto;gap:16px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--trait)}
+.cmd span{color:#34384b;font-size:17px}
+.cmd small{color:var(--gris);font-size:14px}
+
+footer{border-top:1px solid var(--trait);padding:34px 0 52px;color:var(--gris);font-size:16px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 26px;align-items:center}
+footer p{margin:0 auto 0 0}
+footer a{text-decoration:none}
+footer a:hover{color:var(--encre);text-decoration:underline}
+
+@media (max-width:880px){
+  .intro,.rangee,.duo{grid-template-columns:1fr;gap:38px}
+  .rangee.inverse .txt{order:0}
+  .intro{padding-top:24px}
+  ol.pas{grid-template-columns:1fr;gap:28px}
+  .journal li{grid-template-columns:1fr;gap:2px}
+  .liens a.cache-mobile{display:none}
+}
+@media (max-width:560px){
+  body{font-size:17px}
+  .wrap{padding:0 16px}
+  .liens{gap:16px}
+  .srv{grid-template-columns:48px 1fr}
+  .srv .ic{width:48px;height:48px}
+  .srv .rej{grid-column:2}
+  .cmd{grid-template-columns:1fr;gap:2px}
+  figcaption{font-size:22px;padding-left:10px}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="marque" href="/" id="marque">Zentry</a>
+  <nav class="liens" aria-label="Navigation">
+    <a href="/commandes" data-page="commandes">Commandes</a>
+    <a href="/serveurs" data-page="serveurs" id="nav-serveurs" hidden>Serveurs</a>
+    <a class="bouton petit" id="nav-ajouter" href="#">Ajouter Zentry</a>
+  </nav>
+</div></header>
+<main id="app"></main>
+<footer><div class="wrap" id="pied"></div></footer>
+<script>
+/* ---------------------------------------------------------------------------
+   Ce que tu peux modifier facilement :
+   - AUTEUR : ton pseudo, affiché en bas de page et dans les textes ;
+   - JOURNAL : ajoute une ligne en haut à chaque mise à jour du bot.
+   Le nom, le slogan et la couleur se règlent dans le panel (Personnalisation).
+--------------------------------------------------------------------------- */
+const AUTEUR = 'Koteons';
+const JOURNAL = [
+  ['2026-11-26', 'Ananta devient Zentry. De bot d’économie, il passe à bot complet : modération, filtre, logs, niveaux, tickets, giveaways… et ce site.'],
+  ['2026-11-25', 'Première version, sous le nom d’Ananta : l’économie, la banque, la boutique et une dizaine de jeux de casino.'],
+];
+const STATIC = {"info": {"invitation": "https://discord.com/oauth2/authorize?client_id=1575331641016975370&permissions=8&scope=bot%20applications.commands"}, "commandes": [{"nom": "balance", "description": "Voir ton solde (ou celui d'un membre)", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "daily", "description": "Récupérer ta récompense quotidienne", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "hebdo", "description": "Récupérer ta récompense de la semaine", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "work", "description": "Travailler pour gagner des pièces", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "crime", "description": "Tenter un coup risqué", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "vol", "description": "Tenter de voler le portefeuille d'un membre", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "pay", "description": "Donner des pièces à un membre", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "banque", "description": "Voir ton portefeuille et ta banque", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "deposer", "description": "Mettre des pièces à l'abri en banque", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "retirer", "description": "Retirer des pièces de ta banque", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "top", "description": "Les classements du serveur", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "boutique", "description": "Voir les objets en vente", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "acheter", "description": "Acheter un objet de la boutique", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "inventaire", "description": "Voir tes objets (ou ceux d'un membre)", "categorie": "Économie", "emoji": "💰", "equipe": false}, {"nom": "pileouface", "description": "Pile ou face", "categorie": "Jeux", "emoji": "🎰", "equipe": false}, {"nom": "des", "description": "Devine le résultat d'un dé à 6 faces", "categorie": "Jeux", "emoji": "🎰", "equipe": false}, {"nom": "roulette", "description": "Roulette européenne (0 à 36)", "categorie": "Jeux", "emoji": "🎰", "equipe": false}, {"nom": "slots", "description": "Machine à sous", "categorie": "Jeux", "emoji": "🎰", "equipe": false}, {"nom": "roue", "description": "Tourne la roue de la fortune", "categorie": "Jeux", "emoji": "🎰", "equipe": false}, {"nom": "plusoumoins", "description": "Le nombre caché est-il plus grand ou plus petit ?", "categorie": "Jeux", "emoji": "🎰", "equipe": false}, {"nom": "pfc", "description": "Pierre, feuille, ciseaux contre le bot", "categorie": "Jeux", "emoji": "🎰", "equipe": false}, {"nom": "blackjack", "description": "Joue au blackjack contre le croupier", "categorie": "Jeux", "emoji": "🎰", "equipe": false}, {"nom": "poker", "description": "Vidéo-poker : garde tes meilleures cartes", "categorie": "Jeux", "emoji": "🎰", "equipe": false}, {"nom": "mines", "description": "Trouve les diamants sans tomber sur une bombe", "categorie": "Jeux", "emoji": "🎰", "equipe": false}, {"nom": "duel", "description": "Défie un membre : le gagnant remporte les deux mises", "categorie": "Jeux", "emoji": "🎰", "equipe": false}, {"nom": "ban", "description": "Bannir un membre, pour toujours ou pour une durée", "categorie": "Modération", "emoji": "🛡️", "equipe": true}, {"nom": "unban", "description": "Débannir un utilisateur avec son identifiant", "categorie": "Modération", "emoji": "🛡️", "equipe": true}, {"nom": "kick", "description": "Expulser un membre du serveur", "categorie": "Modération", "emoji": "🛡️", "equipe": true}, {"nom": "mute", "description": "Exclure temporairement un membre (il ne peut plus parler)", "categorie": "Modération", "emoji": "🛡️", "equipe": true}, {"nom": "unmute", "description": "Mettre fin à l'exclusion d'un membre", "categorie": "Modération", "emoji": "🛡️", "equipe": true}, {"nom": "warn", "description": "Donner un avertissement à un membre", "categorie": "Modération", "emoji": "🛡️", "equipe": true}, {"nom": "casier", "description": "Voir l'historique des sanctions d'un membre", "categorie": "Modération", "emoji": "🛡️", "equipe": true}, {"nom": "unwarn", "description": "Retirer un avertissement (numéro visible dans /casier)", "categorie": "Modération", "emoji": "🛡️", "equipe": true}, {"nom": "clear", "description": "Supprimer des messages dans ce salon", "categorie": "Modération", "emoji": "🛡️", "equipe": true}, {"nom": "slowmode", "description": "Régler le mode lent d'un salon", "categorie": "Modération", "emoji": "🛡️", "equipe": true}, {"nom": "lock", "description": "Empêcher les membres d'écrire dans un salon", "categorie": "Modération", "emoji": "🛡️", "equipe": true}, {"nom": "unlock", "description": "Rouvrir un salon verrouillé", "categorie": "Modération", "emoji": "🛡️", "equipe": true}, {"nom": "test-bienvenue", "description": "Voir le message de bienvenue comme si tu arrivais", "categorie": "Accueil", "emoji": "👋", "equipe": true}, {"nom": "xp donner", "description": "Donner de l'XP à un membre", "categorie": "Niveaux", "emoji": "📈", "equipe": true}, {"nom": "xp retirer", "description": "Retirer de l'XP à un membre", "categorie": "Niveaux", "emoji": "📈", "equipe": true}, {"nom": "xp reset", "description": "Remettre l'XP d'un membre à zéro", "categorie": "Niveaux", "emoji": "📈", "equipe": true}, {"nom": "rang", "description": "Voir ton niveau (ou celui d'un membre)", "categorie": "Niveaux", "emoji": "📈", "equipe": false}, {"nom": "giveaway lancer", "description": "Lancer un giveaway", "categorie": "Animation", "emoji": "🎉", "equipe": true}, {"nom": "giveaway terminer", "description": "Terminer un giveaway maintenant", "categorie": "Animation", "emoji": "🎉", "equipe": true}, {"nom": "giveaway relancer", "description": "Tirer de nouveaux gagnants", "categorie": "Animation", "emoji": "🎉", "equipe": true}, {"nom": "giveaway liste", "description": "Voir les giveaways en cours", "categorie": "Animation", "emoji": "🎉", "equipe": true}, {"nom": "sondage", "description": "Créer un sondage (jusqu'à 5 choix)", "categorie": "Animation", "emoji": "🎉", "equipe": false}, {"nom": "suggestion", "description": "Proposer une idée pour le serveur", "categorie": "Animation", "emoji": "🎉", "equipe": false}, {"nom": "quiz", "description": "Une question de culture générale : le plus rapide gagne", "categorie": "Animation", "emoji": "🎉", "equipe": false}, {"nom": "8ball", "description": "Pose une question à la boule magique", "categorie": "Animation", "emoji": "🎉", "equipe": false}, {"nom": "choisir", "description": "Laisse le bot choisir pour toi", "categorie": "Animation", "emoji": "🎉", "equipe": false}, {"nom": "anniversaire definir", "description": "Enregistrer ta date d'anniversaire", "categorie": "Communauté", "emoji": "🎂", "equipe": false}, {"nom": "anniversaire supprimer", "description": "Retirer ta date d'anniversaire", "categorie": "Communauté", "emoji": "🎂", "equipe": false}, {"nom": "anniversaire voir", "description": "Voir l'anniversaire d'un membre", "categorie": "Communauté", "emoji": "🎂", "equipe": false}, {"nom": "anniversaire prochains", "description": "Les prochains anniversaires du serveur", "categorie": "Communauté", "emoji": "🎂", "equipe": false}, {"nom": "ticket panneau", "description": "Publier le bouton d'ouverture des tickets", "categorie": "Tickets", "emoji": "🎫", "equipe": false}, {"nom": "ticket fermer", "description": "Fermer le ticket de ce salon", "categorie": "Tickets", "emoji": "🎫", "equipe": false}, {"nom": "ticket ajouter", "description": "Ajouter un membre à ce ticket", "categorie": "Tickets", "emoji": "🎫", "equipe": false}, {"nom": "ticket retirer", "description": "Retirer un membre de ce ticket", "categorie": "Tickets", "emoji": "🎫", "equipe": false}, {"nom": "bump", "description": "Faire remonter le serveur en tête de la liste (toutes les 2 h)", "categorie": "Bump", "emoji": "🚀", "equipe": false}, {"nom": "vocal renommer", "description": "Changer le nom de ton salon", "categorie": "Vocal", "emoji": "🔊", "equipe": false}, {"nom": "vocal limite", "description": "Limiter le nombre de personnes (0 = illimité)", "categorie": "Vocal", "emoji": "🔊", "equipe": false}, {"nom": "vocal verrouiller", "description": "Personne d'autre ne peut entrer", "categorie": "Vocal", "emoji": "🔊", "equipe": false}, {"nom": "vocal deverrouiller", "description": "Tout le monde peut de nouveau entrer", "categorie": "Vocal", "emoji": "🔊", "equipe": false}, {"nom": "vocal inviter", "description": "Autoriser un membre même si le salon est verrouillé", "categorie": "Vocal", "emoji": "🔊", "equipe": false}, {"nom": "aide", "description": "Toutes les commandes du bot", "categorie": "Utilitaire", "emoji": "🧰", "equipe": false}, {"nom": "ping", "description": "Vérifier que le bot répond", "categorie": "Utilitaire", "emoji": "🧰", "equipe": false}, {"nom": "serveurinfo", "description": "Les infos du serveur", "categorie": "Utilitaire", "emoji": "🧰", "equipe": false}, {"nom": "userinfo", "description": "Les infos d'un membre", "categorie": "Utilitaire", "emoji": "🧰", "equipe": false}, {"nom": "avatar", "description": "Afficher l'avatar d'un membre en grand", "categorie": "Utilitaire", "emoji": "🧰", "equipe": false}, {"nom": "rappel", "description": "Le bot te rappelle quelque chose plus tard", "categorie": "Utilitaire", "emoji": "🧰", "equipe": false}, {"nom": "config voir", "description": "Voir les réglages de l'économie et des jeux", "categorie": "Administration", "emoji": "⚙️", "equipe": true}, {"nom": "config modifier", "description": "Modifier un réglage", "categorie": "Administration", "emoji": "⚙️", "equipe": true}, {"nom": "config reset", "description": "Remettre un réglage à sa valeur d'origine", "categorie": "Administration", "emoji": "⚙️", "equipe": true}, {"nom": "config monnaie", "description": "Choisir le nom et l'émoji de la monnaie", "categorie": "Administration", "emoji": "⚙️", "equipe": true}, {"nom": "config joueurs", "description": "Statistiques de l'économie", "categorie": "Administration", "emoji": "⚙️", "equipe": true}, {"nom": "dashboard", "description": "Obtenir le lien du site et du panel", "categorie": "Administration", "emoji": "⚙️", "equipe": true}, {"nom": "annonce", "description": "Envoyer une annonce dans un salon", "categorie": "Administration", "emoji": "⚙️", "equipe": true}, {"nom": "sauvegarde", "description": "(Propriétaire) Télécharger une sauvegarde des données", "categorie": "Administration", "emoji": "⚙️", "equipe": true}, {"nom": "give", "description": "(Propriétaire) Donner des pièces", "categorie": "Administration", "emoji": "⚙️", "equipe": true}, {"nom": "remove", "description": "(Propriétaire) Retirer des pièces", "categorie": "Administration", "emoji": "⚙️", "equipe": true}, {"nom": "set", "description": "(Propriétaire) Fixer le solde d'un membre", "categorie": "Administration", "emoji": "⚙️", "equipe": true}]};  /* rempli automatiquement pour la version GitHub Pages */
+
+const app = document.getElementById('app');
+let INFO = {nom:'Zentry', slogan:'Le bot Discord que je code pour mon serveur, et que tu peux ajouter au tien. Gratuitement.',
+            couleur:'#f2a541', support:'', monnaie:{nom:'pièces', emoji:'💰'}, bot:{nom:'Zentry', avatar:''}, invitation:''};
+let COMMANDS = [];
+let EN_LIGNE = false;
+
+function h(tag, props, ...kids){
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})){
+    if (v === null || v === undefined || v === false) continue;
+    if (k === 'class') e.className = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids.flat()){
+    if (c === null || c === undefined || c === false) continue;
+    e.append(c.nodeType ? c : document.createTextNode(typo(String(c))));
+  }
+  return e;
+}
+/* typographie française : espace insécable avant ? ! : ; et à l'intérieur des guillemets */
+const typo = t => t.replace(/ ([?!:;»])/g, '\u00a0$1').replace(/« /g, '«\u00a0');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => Number(n || 0).toLocaleString('fr-FR').replace(/ /g, ' ');
+async function get(url){ const r = await fetch(url); if (!r.ok) throw new Error(r.status); return r.json(); }
+function dateFr(iso){
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'});
+}
+function depuis(ts){
+  if (!ts) return 'pas encore bumpé';
+  const s = Math.max(0, Date.now() / 1000 - ts);
+  if (s < 3600) return `bumpé il y a ${Math.max(1, Math.floor(s / 60))} min`;
+  if (s < 86400) return `bumpé il y a ${Math.floor(s / 3600)} h`;
+  return `bumpé il y a ${Math.floor(s / 86400)} j`;
+}
+const ajouter = (texte, cls) => h('a', {class: cls || 'bouton', href: INFO.invitation || '#', target: INFO.invitation ? '_blank' : null, rel:'noopener'}, texte);
+const cmd = c => h('code', {}, '/' + c);
+
+/* ------------------------------ captures ------------------------------ */
+const fleche = () => h('span', {html:'<svg width="44" height="34" viewBox="0 0 44 34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M40 30c-11-2-24-8-31-21"/><path d="M9 9l-1 9"/><path d="M9 9l8 3"/></svg>'});
+
+function avatarBot(){
+  return INFO.bot.avatar ? h('img', {src: INFO.bot.avatar, alt: ''}) : (INFO.nom[0] || 'Z').toUpperCase();
+}
+function membre(nom, couleur, texte, heure){
+  return h('div', {class:'msg'}, h('div', {class:'av', style:`background:${couleur}`}, nom[0]),
+    h('div', {}, h('div', {class:'qui'}, nom, h('small', {}, `Aujourd’hui à ${heure}`)), h('div', {}, texte)));
+}
+function reponse(qui, commande, html, heure){
+  return h('div', {class:'msg'}, h('div', {class:'av', style:'background:var(--safran);color:#24170a'}, avatarBot()),
+    h('div', {}, h('div', {class:'utilise'}, `${qui} a utilisé `, h('b', {}, '/' + commande)),
+      h('div', {class:'qui'}, INFO.nom, h('span', {class:'tag'}, 'APP'), h('small', {}, `Aujourd’hui à ${heure}`)),
+      h('div', {html})));
+}
+function capture(sens, legende, ...messages){
+  return h('figure', {class:'capture ' + sens},
+    h('div', {class:'fenetre'}, h('div', {class:'barre'}, h('i', {}, '#'), 'général'), h('div', {class:'msgs'}, messages)),
+    legende ? h('figcaption', {}, fleche(), legende) : null);
+}
+
+/* ------------------------------ accueil ------------------------------- */
+function soulignement(){
+  return h('span', {html:'<svg viewBox="0 0 300 22" preserveAspectRatio="none" aria-hidden="true"><path d="M4 15c48-7 96-9 150-6s98 3 142-4"/></svg>'});
+}
+
+async function accueil(){
+  const m = `${esc(INFO.monnaie.nom)} ${esc(INFO.monnaie.emoji.startsWith('<') ? '' : INFO.monnaie.emoji)}`;
+  const support = INFO.support ? h('a', {class:'lien', href: INFO.support, target:'_blank', rel:'noopener'}, 'le serveur support') : null;
+  const serveurs = EN_LIGNE ? await get('/api/public/serveurs').catch(() => []) : [];
+
+  app.replaceChildren(
+    h('section', {class:'wrap intro'},
+      h('div', {},
+        h('h1', {}, INFO.nom, soulignement()),
+        h('p', {class:'chapeau'}, INFO.slogan),
+        h('p', {class:'suite'}, 'Il modère, il fait tourner une petite économie avec un casino, il compte les niveaux, il lance des giveaways et il ouvre des tickets. Le tout en français.'),
+        h('div', {class:'actions'}, ajouter(`Ajouter ${INFO.nom} à mon serveur`), h('a', {class:'lien', href:'/commandes'}, 'Voir les commandes'))),
+      capture('penche-g', 'un soir comme un autre sur mon serveur',
+        membre('Inès', '#3ba55d', 'bon, qui vient perdre ses pièces au blackjack ce soir ?', '21:40'),
+        reponse('Noa', 'daily', `<div class="embed"><div class="t">🎁 Récompense quotidienne</div>Tu reçois <b>500</b> ${m} !</div>`, '21:41'),
+        membre('Noa', '#ec7f95', 'moi. j’ai un bon pressentiment', '21:41'))),
+
+    h('section', {class:'bloc', id:'fonctions'}, h('div', {class:'wrap'},
+      h('h2', {}, 'Ce qu’il sait faire'),
+      h('p', {class:'sous'}, 'Le tour du propriétaire, en version courte. La liste complète est sur la page des commandes.'),
+      h('div', {class:'rangee'},
+        h('div', {class:'txt'},
+          h('h3', {}, 'La modération'),
+          h('p', {}, 'Les classiques sont là : ', cmd('ban'), ' (même pour quelques jours), ', cmd('kick'), ', ', cmd('mute'), ', ', cmd('warn'), ' et ', cmd('clear'),
+            '. Chaque membre a son casier, et au bout de trois avertissements il est exclu une heure, tout seul. Les seuils se changent.'),
+          h('p', {}, 'Un filtre peut aussi supprimer les invitations vers d’autres serveurs, les liens et les mots que tu choisis. Il y a un anti-spam et un anti-raid pour les mauvais jours.')),
+        capture('penche-d', 'Léo, si tu lis ça…',
+          membre('Sam', '#7aa7ff', 'Léo stop le spam stp', '18:02'),
+          reponse('Sam', 'warn', '⚠️ <b>@Léo</b> a reçu un avertissement (1 au total). Raison : spam', '18:02'))),
+      h('div', {class:'rangee inverse'},
+        h('div', {class:'txt'},
+          h('h3', {}, 'Les pièces et le casino'),
+          h('p', {}, 'Chacun récupère des pièces avec ', cmd('daily'), ', ', cmd('hebdo'), ' ou ', cmd('work'), '. Les plus téméraires tentent ', cmd('crime'), ' ou ', cmd('vol'),
+            '. Pour ne pas se faire dépouiller, il y a la banque.'),
+          h('p', {}, 'Ensuite, on les dépense : dans la boutique, qui peut même vendre des rôles, ou au casino. Blackjack, vidéo-poker, roulette, machine à sous, mines, et des duels pour régler ses comptes entre membres.')),
+        capture('penche-g', '20. je reste, évidemment',
+          reponse('Inès', 'blackjack', `<div class="embed"><div class="t">🃏 Blackjack</div><b>Croupier</b><br><code>K♠</code><code>??</code><br><b>Toi (20)</b><br><code>Q♥</code><code>10♦</code></div>
+            <div class="dbtns"><span class="dbtn p">🃏 Tirer</span><span class="dbtn">✋ Rester</span><span class="dbtn v">💰 Doubler</span></div>`, '21:44'))),
+      h('div', {class:'rangee'},
+        h('div', {class:'txt'},
+          h('h3', {}, 'De quoi animer le serveur'),
+          h('p', {}, 'Des giveaways avec un bouton pour participer et un tirage automatique, des sondages, une boîte à suggestions avec votes, un quiz de culture G qui rapporte des pièces.'),
+          h('p', {}, 'Il y a aussi les anniversaires, avec un rôle rien que pour la journée, et le jeu du compteur, où celui qui se trompe fait tout recommencer à 1.')),
+        capture('penche-d', '42 participants, 1 gagnant, 41 déçus',
+          reponse('Sam', 'giveaway lancer', `<div class="embed"><div class="t">🎉 Nitro 1 mois</div>Clique sur le bouton pour participer !<br>Fin : dans 2 jours<br>Gagnant(s) : <b>1</b></div>
+            <div class="dbtns"><span class="dbtn p">🎉 Participer (42)</span></div>`, '20:15'))),
+      h('div', {class:'duo'},
+        h('div', {},
+          h('h3', {}, 'Les niveaux'),
+          h('p', {}, 'On gagne de l’XP en écrivant et en passant du temps en vocal. Chaque niveau rapporte des pièces, et certains peuvent débloquer un rôle. ',
+            cmd('rang'), ' pour voir où tu en es, ', cmd('top'), ' pour comparer.')),
+        h('div', {},
+          h('h3', {}, 'Et tout le reste'),
+          h('p', {}, 'Messages de bienvenue et de départ, rôles donnés à l’arrivée, tickets avec archive, rôles à choisir avec des boutons, vocaux temporaires, logs, rappels, et ',
+            cmd('bump'), ' pour faire connaître ton serveur.'))))),
+
+    h('section', {class:'bloc etapes'}, h('div', {class:'wrap'},
+      h('h2', {}, `L’ajouter en trois étapes`),
+      h('ol', {class:'pas'},
+        h('li', {}, h('b', {}, `Clique sur « Ajouter ${INFO.nom} »`), ', choisis ton serveur et accepte. Il demande la permission Administrateur : sans elle, il ne peut ni bannir ni donner de rôles.'),
+        h('li', {}, h('b', {}, 'Monte son rôle tout en haut'), ', dans Paramètres du serveur puis Rôles. Un bot ne peut pas toucher aux rôles placés au-dessus du sien.'),
+        h('li', {}, h('b', {}, 'Tape /aide'), ' sur ton serveur. Toutes les commandes sont rangées par catégorie.')),
+      ajouter(`Ajouter ${INFO.nom} à mon serveur`))),
+
+    serveurs.length ? h('section', {class:'bloc'}, h('div', {class:'wrap'},
+      h('h2', {}, `Ils utilisent ${INFO.nom}`),
+      h('p', {class:'sous'}, 'Les derniers serveurs bumpés. Sur le tien, /bump le fait remonter, une fois toutes les deux heures.'),
+      listeServeurs(serveurs.slice(0, 5)),
+      serveurs.length > 5 ? h('p', {style:'margin-top:20px'}, h('a', {class:'lien', href:'/serveurs'}, `Voir les ${serveurs.length} serveurs`)) : null))
+      : document.createDocumentFragment(),
+
+    h('section', {class:'bloc'}, h('div', {class:'wrap'},
+      h('h2', {}, 'Questions'),
+      h('div', {class:'qr'},
+        question('C’est vraiment gratuit ?', 'Oui. Pas de version premium, pas de pub, pas de commande cachée derrière un abonnement.'),
+        question(`${INFO.nom} ne répond plus, c’est normal ?`, 'Il tourne sur un hébergement gratuit, donc il lui arrive de faire une pause. Réessaie un peu plus tard. Si ça dure, préviens-moi.'),
+        question('Je peux changer ses réglages pour mon serveur ?',
+          'Pour l’instant, les réglages (salon de bienvenue, logs, filtre…) passent par un panel auquel j’ai accès seul. Si tu as besoin d’un réglage, demande-moi',
+          support ? [' sur ', support, '.'] : '.'),
+        question('Qu’est-ce qu’il garde sur moi ?', 'Ce qu’il faut pour marcher : ton identifiant Discord, tes pièces, ton XP, tes sanctions et ta date d’anniversaire si tu la donnes. Il n’enregistre pas tes messages, à part le texte de tes suggestions et de tes rappels.'),
+        support ? question('Un bug, une idée ?', 'Viens en parler sur ', support, '. Je lis tout.') : null))),
+
+    h('section', {class:'bloc', style:'padding-top:0'}, h('div', {class:'wrap'},
+      h('h2', {}, 'Journal de bord'),
+      h('ul', {class:'journal'}, JOURNAL.map(([d, t]) => h('li', {}, h('time', {datetime: d}, dateFr(d)), h('span', {}, t)))))));
+}
+
+function question(titre, ...reponse){
+  return h('details', {}, h('summary', {}, titre), h('p', {}, ...reponse));
+}
+
+function listeServeurs(list){
+  return h('div', {class:'serveurs'}, list.map(s => h('article', {class:'srv'},
+    h('div', {class:'ic'}, s.icone ? h('img', {src: s.icone, alt: ''}) : (s.nom || '?')[0].toUpperCase()),
+    h('div', {}, h('b', {}, s.nom), h('div', {class:'meta'}, `${fmt(s.membres)} membres, ${depuis(s.dernier_bump)}`),
+      s.description ? h('p', {}, s.description) : null),
+    h('div', {class:'rej'}, s.invitation ? h('a', {class:'bouton petit', href: s.invitation, target:'_blank', rel:'noopener'}, 'Rejoindre') : null))));
+}
+
+/* ------------------------------ commandes ----------------------------- */
+function commandes(){
+  let q = '', cat = decodeURIComponent(location.hash.slice(1));
+  const cats = [...new Set(COMMANDS.map(c => c.categorie))];
+  if (!cats.includes(cat)) cat = '';
+  const liste = h('div'), filtres = h('div', {class:'outils'});
+  const champ = h('input', {class:'chercher', type:'search', placeholder:'Chercher (ex : ban, giveaway)', 'aria-label':'Chercher une commande'});
+  champ.addEventListener('input', () => { q = champ.value.trim().toLowerCase(); dessiner(); });
+  function dessiner(){
+    filtres.replaceChildren(champ, ...['', ...cats].map(c => h('button', {class:'filtre', 'aria-pressed': String(c === cat),
+      onclick: () => { cat = c; history.replaceState(null, '', c ? '#' + encodeURIComponent(c) : location.pathname); dessiner(); }}, c || 'Toutes')));
+    const groupes = cats.filter(c => !cat || c === cat).map(c => {
+      const items = COMMANDS.filter(x => x.categorie === c && (!q || x.nom.includes(q) || x.description.toLowerCase().includes(q)));
+      return items.length ? h('div', {class:'cat'}, h('h2', {}, c),
+        items.map(x => h('div', {class:'cmd'}, h('code', {}, '/' + x.nom), h('span', {}, x.description), x.equipe ? h('small', {}, 'équipe') : h('small')))) : null;
+    }).filter(Boolean);
+    liste.replaceChildren(...(groupes.length ? groupes : [h('p', {class:'vide'}, 'Rien ne correspond. Essaie un autre mot.')]));
+  }
+  dessiner();
+  app.replaceChildren(h('div', {class:'wrap'},
+    h('div', {class:'tete'}, h('h1', {}, 'Les commandes'),
+      h('p', {class:'sous', style:'margin:0'}, `Les ${COMMANDS.length} commandes de ${INFO.nom}. Tape / dans Discord et elles apparaissent. Celles marquées « équipe » demandent une permission, comme bannir ou gérer le serveur.`)),
+    filtres, liste));
+}
+
+async function pageServeurs(){
+  const list = await get('/api/public/serveurs').catch(() => []);
+  app.replaceChildren(h('div', {class:'wrap', style:'padding-bottom:60px'},
+    h('div', {class:'tete'}, h('h1', {}, 'Les serveurs'),
+      h('p', {class:'sous', style:'margin:0'}, `Ceux qui utilisent ${INFO.nom}, du dernier bump au plus ancien. Sur ton serveur, /bump le fait remonter, une fois toutes les deux heures.`)),
+    list.length ? listeServeurs(list) : h('p', {class:'vide'}, 'Personne dans la liste pour l’instant. Le premier à faire /bump prend la tête.')));
+}
+
+/* ------------------------------ démarrage ----------------------------- */
+function habiller(page){
+  const c = /^#[0-9a-f]{6}$/i.test(INFO.couleur) ? INFO.couleur : '#f2a541';
+  document.documentElement.style.setProperty('--safran', c);
+  const marque = document.getElementById('marque');
+  marque.replaceChildren(...(INFO.bot.avatar ? [h('img', {src: INFO.bot.avatar, alt: ''})] : []), INFO.nom);
+  document.getElementById('nav-ajouter').textContent = `Ajouter ${INFO.nom}`;
+  document.getElementById('nav-ajouter').href = INFO.invitation || '#';
+  document.getElementById('nav-serveurs').hidden = !EN_LIGNE;
+  for (const a of document.querySelectorAll('.liens a[data-page]')) if (a.dataset.page === page) a.setAttribute('aria-current', 'page');
+  if (page !== 'accueil') document.title = `${page === 'commandes' ? 'Les commandes' : 'Les serveurs'} de ${INFO.nom}`;
+  document.getElementById('pied').replaceChildren(...[
+    h('p', {}, `${INFO.nom} est un projet perso de ${AUTEUR}, codé en Python avec discord.py.`),
+    h('a', {href: INFO.invitation || '#'}, 'Ajouter'),
+    h('a', {href:'/commandes'}, 'Commandes'),
+    INFO.support ? h('a', {href: INFO.support, target:'_blank', rel:'noopener'}, 'Serveur support') : null,
+    EN_LIGNE ? h('a', {href:'/panel'}, 'Panel') : null].filter(Boolean));
+}
+
+(async function(){
+  Object.assign(INFO, STATIC.info || {});
+  try { Object.assign(INFO, await get('/api/public')); EN_LIGNE = true; } catch (e) {}
+  try { COMMANDS = await get('/api/public/commandes'); } catch (e) {}
+  if (!COMMANDS.length) COMMANDS = STATIC.commandes || [];
+  const chemin = location.pathname.replace(/\/+$/, '');
+  const page = chemin.endsWith('/commandes') ? 'commandes' : chemin.endsWith('/serveurs') && EN_LIGNE ? 'serveurs' : 'accueil';
+  habiller(page);
+  if (page === 'commandes') commandes();
+  else if (page === 'serveurs') await pageServeurs();
+  else await accueil();
+})();
+</script>
+</body>
+</html>
